@@ -10,17 +10,19 @@ _Base = _declarative_base()
 
 
 class DatabaseManager:
-    def __init__(self, databse_filepath):
-        engine = _create_engine('sqlite:///{}'.format(databse_filepath))
+    def __init__(self, database_filepath):
+        engine = _create_engine('sqlite:///{}'.format(database_filepath))
         _Base.metadata.bind = engine
         DBSession = _orm.sessionmaker(bind=engine)
         self.session = DBSession()
 
     def record_message(self, service, author, text):
-        author = self.session.query(Author).filter(Author.service == service,
-                                                   Author.name == author).one()
+        A = Author
+        try:
+            author = self.session.query(A).filter(A.service == service,
+                                                  A.name == author).one()
 
-        if not author:
+        except _orm.exc.NoResultFound:
             author = self._create_author(service, author)
 
         new_message = Message(text=text, author=author)
@@ -51,5 +53,5 @@ class Message(_Base):
 
 def create_database(database_filepath):
     if not path.isfile(database_filepath):
-        engine = _create_engine(database_filepath)
+        engine = _create_engine('sqlite:///{}'.format(database_filepath))
         _Base.metadata.create_all(engine)

@@ -27,6 +27,7 @@ setup(
     author='Ben Hoff',
     author_email='beohoff@gmail.com',
     packages= find_packages(), # exclude=['docs', 'tests']
+    entry_points={'vexbot.plugins': ['vexstorage = vexstorage.__main__'],},
     install_requires=[
         'pyzmq',
         'sqlalchemy',
