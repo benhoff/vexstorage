@@ -5,6 +5,8 @@ from os import path
 
 import yaml
 
+from vexmessage import decode_vex_message
+
 from vexstorage.messaging import Messaging
 from vexstorage.database import DatabaseManager, create_database
 
@@ -28,14 +30,10 @@ def main(database_file, settings_filepath):
 def run(database, messaging):
     while True:
         frame = messaging.sub_socket.recv_multipart()
-        frame = (frame[0].decode('ascii'),
-                 *pickle.loads(frame[1]))
+        msg = decode_vex_message(frame)
 
-        if len(frame) == 4:
-            service = frame[0]
-            author = frame[2]
-            text = frame[3]
-            database.record_message(service, author, text)
+        if msg.type == 'MSG':
+            database.record_message(msg.source, msg.contents[0], msg.contents[1])
 
 
 def _get_kwargs():
