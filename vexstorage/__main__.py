@@ -1,4 +1,5 @@
 import os
+import pickle
 import argparse
 from os import path
 
@@ -26,7 +27,9 @@ def main(database_file, settings_filepath):
 
 def run(database, messaging):
     while True:
-        frame = messaging.sub_socket.recv_pyobj()
+        frame = messaging.sub_socket.recv_multipart()
+        frame = (frame[0].decode('ascii'),
+                 *pickle.loads(frame[1]))
 
         if len(frame) == 4:
             service = frame[0]

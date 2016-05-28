@@ -10,7 +10,7 @@ with open(os.path.join(directory, 'README.rst')) as f:
 
 setup(
     name="vexstorage",
-    version='0.0.1',
+    version='0.1.0',
     description='Database storage for vexbot',
     # long_description=long_description,
     url='https://github.com/benhoff/vexstorage',
