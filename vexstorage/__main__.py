@@ -1,5 +1,4 @@
 import os
-import pickle
 import argparse
 from os import path
 
@@ -9,6 +8,12 @@ from vexmessage import decode_vex_message
 
 from vexstorage.messaging import Messaging
 from vexstorage.database import DatabaseManager, create_database
+
+try:
+    import setproctitle
+    setproctitle.setproctitle('vexstorage')
+except ImportError:
+    pass
 
 
 def main(database_file, settings_filepath):
@@ -33,7 +38,9 @@ def run(database, messaging):
         msg = decode_vex_message(frame)
 
         if msg.type == 'MSG':
-            database.record_message(msg.source, msg.contents[0], msg.contents[1])
+            database.record_message(msg.source,
+                                    msg.contents[0],
+                                    msg.contents[1])
 
 
 def _get_kwargs():
