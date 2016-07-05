@@ -38,9 +38,12 @@ def run(database, messaging):
         msg = decode_vex_message(frame)
 
         if msg.type == 'MSG':
-            database.record_message(msg.source,
-                                    msg.contents[0],
-                                    msg.contents[1])
+            author = msg.contents.get('author', msg.source)
+            contents = msg.contents.get('message', None)
+            if contents:
+                database.record_message(msg.source,
+                                        author,
+                                        contents)
 
 
 def _get_kwargs():
