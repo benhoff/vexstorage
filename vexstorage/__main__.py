@@ -21,11 +21,12 @@ def run(database_filepath: str=None, addresses: list=None):
     if database_filepath is None:
         database_filepath = _get_database_filepath()
     if addresses is None:
-        addresses = ['tcp://127.0.0.1:4000', ]
+        addresses = ['tcp://127.0.0.1:4001']
 
     database = DatabaseManager(database_filepath)
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
+    socket.setsockopt(zmq.SUBSCRIBE, b'')
     for address in addresses:
         socket.connect(address)
     while True:
@@ -44,7 +45,7 @@ def run(database_filepath: str=None, addresses: list=None):
                                         contents)
 
 
-def create_database(database_filepath):
+def create_database():
     kwargs = _get_kwargs()
     _create_database(kwargs['database_filepath'])
 
