@@ -7,7 +7,8 @@ from vexbot.util.messaging import get_addresses
 
 import zmq
 
-from vexstorage.database import DatabaseManager, create_database, _get_database_filepath
+from vexstorage.database import DatabaseManager
+from vexstorage.database import create_database as _create_database
 
 try:
     import setproctitle
@@ -20,7 +21,7 @@ def run(database_filepath: str=None, addresses: list=None):
     if database_filepath is None:
         database_filepath = _get_database_filepath()
     if addresses is None:
-        addresses = ['tcp://127.0.0.1:4001', ]
+        addresses = ['tcp://127.0.0.1:4000', ]
 
     database = DatabaseManager(database_filepath)
     context = zmq.Context()
@@ -43,9 +44,14 @@ def run(database_filepath: str=None, addresses: list=None):
                                         contents)
 
 
+def create_database(database_filepath):
+    kwargs = _get_kwargs()
+    _create_database(kwargs['database_filepath'])
+
+
 def _get_kwargs():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--database_filepath',
+    parser.add_argument('database_filepath',
                         action='store',
                         default=None)
 

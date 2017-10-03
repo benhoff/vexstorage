@@ -28,7 +28,7 @@ setup(
     author_email='beohoff@gmail.com',
     packages= find_packages(), # exclude=['docs', 'tests']
     entry_points={'console_scripts': ['vexstorage = vexstorage.__main__:main',
-                                      'vexstorage_make_database = vexstorage.database:create_database'],},
+                                      'vexstorage_make_database = vexstorage.__main__:create_database'],},
     install_requires=[
         'pyzmq',
         'sqlalchemy',
