@@ -27,11 +27,11 @@ setup(
     author='Ben Hoff',
     author_email='beohoff@gmail.com',
     packages= find_packages(), # exclude=['docs', 'tests']
-    entry_points={'vexbot.plugins': ['vexstorage = vexstorage.__main__'],},
+    entry_points={'console_scripts': ['vexstorage = vexstorage.__main__:main',
+                                      'vexstorage_make_database = vexstorage.database:create_database'],},
     install_requires=[
         'pyzmq',
         'sqlalchemy',
-        'pyyaml',
         'vexmessage',
         ],
 

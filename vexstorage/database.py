@@ -51,7 +51,23 @@ class Message(_Base):
     author = _orm.relationship(Author)
 
 
-def create_database(database_filepath):
+def _get_database_filepath() -> str:
+    return path.join(path.expanduser('~'), 
+                     '.config',
+                     'vexbot',
+                     'message_storage.db')
+
+
+def create_database(database_filepath=None):
+    if database_filepath is None:
+        config = path.join(path.expanduser('~'), '.config')
+        if not path.isdir(config):
+            os.mkdir(config)
+        vexdir = path.join(config, 'vexbot')
+        if not path.isdir(vexdir):
+            os.mkdir(vexdir)
+        database_filepath = path.join(vexdir, 'message_storage.db')
+
     if not path.isfile(database_filepath):
         engine = _create_engine('sqlite:///{}'.format(database_filepath))
         _Base.metadata.create_all(engine)
